@@ -21,36 +21,35 @@ import javax.net.ssl.HttpsURLConnection;
 final class QueryUtils {
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
-    private QueryUtils(){
+    private QueryUtils() {
 
     }
 
-    public static ArrayList<EarthQuake> fetchEarthQuakeData (String requestUrl){
+    static ArrayList<EarthQuake> fetchEarthQuakeData(String requestUrl) {
         URL url = createUrl(requestUrl);
         String jsonResponse = null;
-        try{
+        try {
             jsonResponse = makeHttpRequest(url);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<EarthQuake> earthquake = extractFeatureFromJson(jsonResponse);
-        return earthquake;
+        return extractFeatureFromJson(jsonResponse);
     }
 
 
-    private static URL createUrl(String stringUrl){
+    private static URL createUrl(String stringUrl) {
         URL url = null;
-        try{
+        try {
             url = new URL(stringUrl);
-        }catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         return url;
     }
 
-    private static String makeHttpRequest (URL url) throws IOException {
+    private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
-        if (url == null){
+        if (url == null) {
             return jsonResponse;
         }
 
@@ -62,20 +61,20 @@ final class QueryUtils {
             urlConnection.setConnectTimeout(15000);
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
-            if (urlConnection.getResponseCode() == 200){
+            if (urlConnection.getResponseCode() == 200) {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
-            }else {
+            } else {
                 Log.e(LOG_TAG, "Response code error" + urlConnection.getResponseCode());
             }
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "Problem retrieving the earthquake json response", e);
-        }finally {
-            if (urlConnection != null){
+        } finally {
+            if (urlConnection != null) {
                 urlConnection.disconnect();
             }
-            if (inputStream != null){
+            if (inputStream != null) {
                 inputStream.close();
             }
         }
@@ -84,11 +83,11 @@ final class QueryUtils {
 
     private static String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
-        if (inputStream != null){
+        if (inputStream != null) {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
             BufferedReader reader = new BufferedReader(inputStreamReader);
             String line = reader.readLine();
-            while (line != null){
+            while (line != null) {
                 output.append(line);
                 line = reader.readLine();
             }
@@ -97,12 +96,12 @@ final class QueryUtils {
     }
 
 
-    private static ArrayList<EarthQuake> extractFeatureFromJson(String jsonResponse){
+    private static ArrayList<EarthQuake> extractFeatureFromJson(String jsonResponse) {
         ArrayList<EarthQuake> earthQuakes = new ArrayList<>();
-        try{
+        try {
             JSONObject root = new JSONObject(jsonResponse);
             JSONArray featuresArray = root.getJSONArray("features");
-            for (int i = 0; i < featuresArray.length(); i++){
+            for (int i = 0; i < featuresArray.length(); i++) {
                 JSONObject feature = featuresArray.getJSONObject(i);
                 JSONObject properties = feature.getJSONObject("properties");
                 double magnitude = properties.getDouble("mag");
@@ -112,7 +111,7 @@ final class QueryUtils {
                 Uri earthQuakeUrl = Uri.parse(quakeUrl);
                 earthQuakes.add(new EarthQuake(magnitude, location, time, earthQuakeUrl));
             }
-        }catch (JSONException e){
+        } catch (JSONException e) {
             Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
         }
         return earthQuakes;
