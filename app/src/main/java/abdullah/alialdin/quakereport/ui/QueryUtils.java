@@ -1,4 +1,4 @@
-package abdullah.alialdin.quakereport;
+package abdullah.alialdin.quakereport.ui;
 
 import android.net.Uri;
 import android.util.Log;
@@ -17,6 +17,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import abdullah.alialdin.quakereport.pojo.EarthQuake;
 
 final class QueryUtils {
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();

@@ -1,4 +1,4 @@
-package abdullah.alialdin.quakereport;
+package abdullah.alialdin.quakereport.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -17,6 +17,9 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import abdullah.alialdin.quakereport.R;
+import abdullah.alialdin.quakereport.pojo.EarthQuake;
 
 public class EarthQuakeAdapter extends ArrayAdapter<EarthQuake> {
     EarthQuakeAdapter(@NonNull Context context, ArrayList<EarthQuake> earthQuakes) {
